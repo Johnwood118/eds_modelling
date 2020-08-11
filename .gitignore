@@ -2,4 +2,12 @@
 .Rhistory
 .RData
 .Ruserdata
+
+# Ignore following files
+
 *.csv
+*.zip
+*.gz
+
+# Ignore following folder
+./data/
