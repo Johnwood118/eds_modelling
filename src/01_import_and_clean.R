@@ -6,19 +6,55 @@ library(data.table)
 
 loans_dt <- fread("data/raw/loans.csv", na.strings = "")
 
-# Quick summary
-sapply(mtcars, function(x) sum(is.na(x)))
-
-# Distributions 
-
-# income
-loans_dt[, summary(loan_amount)]
-
-
 # Change names
 setnames(loans_dt, 
          c("year","issue_date", "nr_accounts"), 
          c("issue_year", "issue_month", "num_accounts"))
+
+
+# Fix annual income 
+
+loans_dt[, annual_income := gsub("GBP ", "", annual_income)]
+
+# Set initial classes 
+
+num_cols <- c("annual_income")
+
+loans_dt[, (num_cols) := lapply(.SD, as.numeric), .SDcols = num_cols]
+
+loans_dt[, annual_income := as.numeric(annual_income)]
+
+# Quick summary
+sapply(loans_dt, function(x) sum(is.na(x)))
+
+# Distributions 
+
+# income
+loans_dt[, summary(annual_income)]
+
+# dti
+loans_dt[, summary(debt_to_income)]
+
+# Loan amount
+loans_dt[, summary(loan_amount)]
+
+# Loan amount
+loans_dt[, summary(credit_card_balance)]
+
+# installment
+loans_dt[, summary(installment)]
+
+# interest rate
+loans_dt[, summary(interest_rate)]
+
+# Amount paid
+loans_dt[, summary(amount_payed)]
+
+# Amount paid
+# TODO some are negative, some are too high - WHY?
+loans_dt[, summary(credit_score)]
+
+
 
 # Fix dates
 
